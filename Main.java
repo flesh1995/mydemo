@@ -1,14 +1,16 @@
 import java.util.Scanner;
 import  java.lang.NumberFormatException;
-public class Calculator {
+public class Main {
     public static void main(String[] args) throws ScannerExcept {
         //Пользовательский ввод
         System.out.println("Здравствуйте. Это калькулятор для расчета арабских и римских цифр");
         System.out.println("Формат математической операции - два операнда в одной системе счисления и один оператор (+, -, /, *). Удачи");
         Scanner scanner = new Scanner(System.in);
-        String stringInput = scanner.nextLine();
-        String[] expression = stringInput.split(" ");
-
+        String input = scanner.nextLine();
+        System.out.println(calc(input));
+    }
+    public static String calc(String input) throws ScannerExcept{
+        String[] expression = input.split(" ");
         // Проверка на ошибки
         if (expression.length < 3){
             throw new ScannerExcept ("Cтрока не является математической операцией");
@@ -33,6 +35,7 @@ public class Calculator {
         //Проходим по вводу и ищем римские числа
         int intdexROMA = -1;
         int intdexROMA2 = -1;
+
         // Расчет
         try {
             for (int q = 0; q < roma.length; q++) {
@@ -50,28 +53,30 @@ public class Calculator {
                 //Перевод строковых данных в числа
                 int numberFirst = Integer.parseInt(expression[0]);
                 int numberSecond = Integer.parseInt(expression[2]);
+                int resultat = 0;
                 if (0 < numberFirst && numberFirst< 11) {
                     if(0< numberSecond && numberSecond < 11){
                         // Операции
                         switch (expression[1]) {
                             case "+":
-                                System.out.println(numberFirst + numberSecond);
+                                resultat = numberFirst + numberSecond;
                                 break;
                             case "-":
-                                System.out.println(numberFirst - numberSecond);
+                                resultat = numberFirst - numberSecond;
                                 break;
                             case "/":
-                                System.out.println(numberFirst / numberSecond);
+                                resultat = numberFirst / numberSecond;
                                 break;
                             case "*":
-                                System.out.println(numberFirst * numberSecond);
+                                resultat = numberFirst * numberSecond;
                                 break;
                         }
                     }
                 } else {
-                    System.out.println("Числа должны быть от 1 до 10");
-                    }
-            // Расчет Римских чисел
+                   throw new ScannerExcept("Числа должны быть от 1 до 10");
+                }
+                input = String.valueOf(resultat);
+                // Расчет Римских чисел
             }else if (intdexROMA != -1 && intdexROMA2 != -1) {
                 //Перевод Римских в Арабские
                 String [] rimDes = {"X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC", "C"};
@@ -85,7 +90,7 @@ public class Calculator {
                         if (sloshenie < 11) {
                             for (int s = 0; s < numbers.length; s++) {
                                 if (numbers[s] == sloshenie) {
-                                    System.out.println(roma[s]);
+                                   input = roma[s];
                                 }
                             }
                         }else {
@@ -93,7 +98,7 @@ public class Calculator {
                             int indexNumbersDes_2 = sloshenie % 10;
                             for (int s = 0; s < numbersDes.length; s++) {
                                 if (numbersDes[s] == indexNumbersDes_1) {
-                                            indexNumbersDes_1 = s;
+                                    indexNumbersDes_1 = s;
                                 }
                             }
                             if (indexNumbersDes_2 != 0) {
@@ -103,59 +108,59 @@ public class Calculator {
                                     }
 
                                 }
-                                        System.out.println(rimDes[indexNumbersDes_1] + roma[indexNumbersDes_2]);
-                                    }else {System.out.println(rimDes[indexNumbersDes_1]);}
-                                }
+                                input = rimDes[indexNumbersDes_1] + roma[indexNumbersDes_2];
+                            }else {input = rimDes[indexNumbersDes_1];}
+                        }
                         break;
                     case "-":
                         int minus = numberFirstR - numberSecondR;
-                            if (minus < 0){
-                                throw new ScannerExcept ("В римской системе нет отрицательных чисел");
+                        if (minus < 0){
+                            throw new ScannerExcept ("В римской системе нет отрицательных чисел");
+                        }
+                        for (int s = 0; s < numbers.length; s++) {
+                            if (numbers[s] == minus) {
+                                input = roma[s];
+                            } else if (minus == 0) {
+                                input = "0";
                             }
-                            for (int s = 0; s < numbers.length; s++) {
-                                if (numbers[s] == minus) {
-                                    System.out.println(roma[s]);
-                                } else if (minus == 0) {
-                                    System.out.println(0);
-                                }
-                            }
+                        }
                         break;
                     case "/":
                         int delenie = numberFirstR / numberSecondR;
-                            for (int s = 0; s < numbers.length; s++) {
-                                if (numbers[s] == delenie) {
-                                    System.out.println(roma[s]);
-                                }
+                        for (int s = 0; s < numbers.length; s++) {
+                            if (numbers[s] == delenie) {
+                                input = roma[s];
                             }
+                        }
                         break;
                     case "*":
                         int umnoshenie = numberFirstR * numberSecondR;
                         if (umnoshenie < 11) {
                             for (int s = 0; s < numbers.length; s++) {
                                 if (numbers[s] == umnoshenie) {
-                                    System.out.println(roma[s]);
+                                    input = roma[s];
                                 }
                             }
-                                }else {
-                                    int indexNumbersDes_1 = (umnoshenie / 10) * 10;
-                                    int indexNumbersDes_2 =umnoshenie % 10;
-                                    for (int s = 0; s < numbersDes.length; s++) {
-                                        if (numbersDes[s] == indexNumbersDes_1) {
-                                            indexNumbersDes_1 = s;
-                                        }
-                                    }
-                                    if (indexNumbersDes_2 != 0) {
-                                        for (int wer = 0; wer < numbers.length; wer++) {
-                                            if (numbers[wer] == indexNumbersDes_2) {
-                                                indexNumbersDes_2 = wer;
-                                            }
-
-                                        }
-                                        System.out.println(rimDes[indexNumbersDes_1] + roma[indexNumbersDes_2]);
-                                    }else {System.out.println(rimDes[indexNumbersDes_1]);}
+                        }else {
+                            int indexNumbersDes_1 = (umnoshenie / 10) * 10;
+                            int indexNumbersDes_2 =umnoshenie % 10;
+                            for (int s = 0; s < numbersDes.length; s++) {
+                                if (numbersDes[s] == indexNumbersDes_1) {
+                                    indexNumbersDes_1 = s;
                                 }
-                        break;
+                            }
+                            if (indexNumbersDes_2 != 0) {
+                                for (int wer = 0; wer < numbers.length; wer++) {
+                                    if (numbers[wer] == indexNumbersDes_2) {
+                                        indexNumbersDes_2 = wer;
+                                    }
+
+                                }
+                                input = rimDes[indexNumbersDes_1] + roma[indexNumbersDes_2];
+                            }else {input = rimDes[indexNumbersDes_1];}
                         }
+                        break;
+                }
             }else if (intdexROMA == -1 && intdexROMA2 != -1) {
                 int control = Integer.parseInt(expression[0]);
                 for (int i = 0; i < numbers.length; i ++){
@@ -172,7 +177,8 @@ public class Calculator {
                 }
             }
         }catch (NumberFormatException e) {
-            System.out.println("Используйте только целые числа");
+            throw new ScannerExcept ("Используйте только целые числа");
         }
+    return input;
     }
 }
